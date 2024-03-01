@@ -2,8 +2,11 @@ package br.com.wellitonleal.swiftcatalog.services;
 
 import br.com.wellitonleal.swiftcatalog.domain.category.Category;
 import br.com.wellitonleal.swiftcatalog.domain.category.CategoryDTO;
+import br.com.wellitonleal.swiftcatalog.domain.category.exceptions.CategoryNotFoundExcepetion;
 import br.com.wellitonleal.swiftcatalog.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -17,5 +20,30 @@ public class CategoryService {
         Category newCategory = new Category(categoryDTO);
         this.categoryRepository.save(newCategory);
         return newCategory;
+    }
+
+    public List<Category> getAll(){
+        return this.categoryRepository.findAll();
+    }
+
+    public Category update(String id, CategoryDTO categoryDTO){
+        Category category = this.categoryRepository.findById(id).
+                orElseThrow(CategoryNotFoundExcepetion::new);
+
+        if (!categoryDTO.title().isEmpty()) {
+            category.setTitle(categoryDTO.title());
+        }
+        if (!categoryDTO.description().isEmpty()) {
+            category.setDescription(categoryDTO.description());
+        }
+        this.categoryRepository.save(category);
+
+        return category;
+    }
+
+    public void delete(String id) {
+        Category category = this.categoryRepository.findById(id).
+                orElseThrow(CategoryNotFoundExcepetion::new);
+        this.categoryRepository.delete(category);
     }
 }
