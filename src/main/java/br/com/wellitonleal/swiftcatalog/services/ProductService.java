@@ -12,8 +12,8 @@ import java.util.List;
 
 @Service
 public class ProductService {
-    private CategoryService categoryService;
-    private ProductRepository productRepository;
+    private final CategoryService categoryService;
+    private final ProductRepository productRepository;
 
     public ProductService(CategoryService categoryService, ProductRepository productRepository){
         this.categoryService = categoryService;
@@ -38,8 +38,10 @@ public class ProductService {
         Product product = this.productRepository.findById(id).
                 orElseThrow(ProductNotFoundException::new);
 
-       this.categoryService.getById(productDTO.categoryId()).
-                ifPresent(product::setCategory);
+        if(productDTO.categoryId() != null){
+            this.categoryService.getById(productDTO.categoryId()).
+                    ifPresent(product::setCategory);
+        }
 
         if (!productDTO.title().isEmpty()) {
             product.setTitle(productDTO.title());
