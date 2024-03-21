@@ -1,7 +1,5 @@
 # Swift Catalog
 
-![swift-catalog-api](img/api/swift-catalog-api.png)
-
 Uma API para cadastro de produtos e categorias.
 
 # Estrutura final do projeto
